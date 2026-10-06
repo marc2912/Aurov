@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis – Privacy Policy</title>
+<meta name="description" content="How Jarvis accesses, uses, stores, protects and shares Google user data.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site">
+  <div class="inner">
+    <a class="brand" href="index.html">Jarvis</a>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="privacy.html" aria-current="page">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <h1 class="page-title">Jarvis Privacy Policy</h1>
+  <p class="meta">Effective date: October 6, 2026 · Last updated: October 6, 2026</p>
+
+  <nav class="toc" aria-label="Contents">
+    <ol>
+      <li><a href="#scope">Who this policy covers</a></li>
+      <li><a href="#accessed">Google data Jarvis accesses</a></li>
+      <li><a href="#use">How Jarvis uses Google data</a></li>
+      <li><a href="#storage">Storage and retention</a></li>
+      <li><a href="#sharing">Sharing and disclosure</a></li>
+      <li><a href="#limited-use">Limited Use disclosure</a></li>
+      <li><a href="#security">How Google data is protected</a></li>
+      <li><a href="#deletion">Revoking access and deleting data</a></li>
+      <li><a href="#other">Other information</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <section id="scope">
+    <h2>1. Who this policy covers</h2>
+    <p>This policy describes how Jarvis (“Jarvis”, “the app”) accesses, uses, stores, protects and shares data obtained from Google APIs (“Google user data”).</p>
+    <p>Jarvis is a private, self-hosted AI assistant operated by a single individual (“the owner”) for his own use. Jarvis is used only with Google accounts that belong to the owner. It is not offered to the public, has no other users, and does not collect data from anyone else.</p>
+  </section>
+
+  <section id="accessed">
+    <h2>2. Google data Jarvis accesses</h2>
+    <p>Jarvis accesses Google user data only after the owner grants permission on Google's standard consent screen. Depending on the permissions granted, Jarvis can access:</p>
+    <table>
+      <thead>
+        <tr><th>Google service</th><th>Data accessed</th><th>Permissions (OAuth scopes)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gmail</td>
+          <td>Email messages and threads (headers, body, attachments), drafts, labels and basic mail settings</td>
+          <td><code>gmail.readonly</code>, <code>gmail.compose</code>, <code>gmail.send</code>, <code>gmail.modify</code>, <code>gmail.labels</code>, <code>gmail.settings.basic</code></td>
+        </tr>
+        <tr>
+          <td>Google Calendar</td>
+          <td>Calendars, events, attendees and availability</td>
+          <td><code>calendar</code>, <code>calendar.events</code></td>
+        </tr>
+        <tr>
+          <td>Google Drive</td>
+          <td>File and folder names, metadata, contents and sharing settings</td>
+          <td><code>drive</code>, <code>drive.file</code></td>
+        </tr>
+        <tr>
+          <td>Google Docs</td>
+          <td>Document contents</td>
+          <td><code>documents</code></td>
+        </tr>
+        <tr>
+          <td>Google Sheets</td>
+          <td>Spreadsheet contents</td>
+          <td><code>spreadsheets</code></td>
+        </tr>
+        <tr>
+          <td>Google Slides</td>
+          <td>Presentation contents</td>
+          <td><code>presentations</code></td>
+        </tr>
+        <tr>
+          <td>Google Account</td>
+          <td>Email address and basic profile (name)</td>
+          <td><code>userinfo.email</code>, <code>userinfo.profile</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Jarvis does not access Google data that is not needed to fulfil a request from the owner, and requests no permissions beyond those listed above.</p>
+  </section>
+
+  <section id="use">
+    <h2>3. How Jarvis uses Google data</h2>
+    <p>Jarvis uses Google user data only to provide the features the owner asks for, on demand:</p>
+    <ul>
+      <li><strong>Gmail:</strong> to search, read and summarize the owner's email, draft replies, and send, label or archive messages after the owner approves.</li>
+      <li><strong>Google Calendar:</strong> to read the owner's schedule and availability, and to create, update or delete events after the owner approves.</li>
+      <li><strong>Google Drive:</strong> to find, read, upload, organize and share the owner's files after the owner approves any change.</li>
+      <li><strong>Google Docs, Sheets and Slides:</strong> to read, summarize, create and edit the owner's documents, spreadsheets and presentations after the owner approves any change.</li>
+      <li><strong>Google Account profile:</strong> to identify which of the owner's Google accounts is connected, so that each request goes to the correct account.</li>
+    </ul>
+    <p>Jarvis does not use Google user data for advertising, marketing, profiling, credit or lending decisions, or any purpose unrelated to the owner's own requests. Jarvis does not sell Google user data.</p>
+  </section>
+
+  <section id="storage">
+    <h2>4. Storage and retention</h2>
+    <p>Jarvis runs entirely on a private server owned and operated by the owner. No part of Jarvis is cloud hosted.</p>
+    <ul>
+      <li><strong>Google content is not stored by Jarvis.</strong> Email, calendar entries, files and document contents are fetched from Google when a request needs them and are processed to produce a response. Jarvis does not copy them into its own database or file storage.</li>
+      <li><strong>Conversation history.</strong> Excerpts of Google data that appear in the owner's conversation with the assistant (for example, a summary of an email) remain only on the owner's self-hosted server and can be deleted by the owner at any time.</li>
+      <li><strong>Authorization tokens.</strong> The only Google credentials Jarvis stores are the OAuth tokens that let it stay connected. They are kept on the owner's server until access is revoked or the tokens are deleted.</li>
+      <li><strong>Google.</strong> Changes the owner approves (such as sending an email or editing a document) are made in the owner's Google account and are stored by Google under Google's own terms.</li>
+    </ul>
+  </section>
+
+  <section id="sharing">
+    <h2>5. Sharing and disclosure</h2>
+    <p>Jarvis does not share, sell, rent or transfer Google user data to any third party, except:</p>
+    <ul>
+      <li><strong>AI language-model provider.</strong> To answer a request, the portions of Google data needed for that request (for example, the text of an email the owner asked to summarize) may be sent to the AI language-model provider the owner has configured, solely to generate a response for the owner. This transfer is limited to providing the feature the owner requested, and the data is not used by Jarvis to train AI or machine-learning models.</li>
+      <li><strong>Google.</strong> To carry out actions the owner requests in his own Google account.</li>
+      <li><strong>Legal requirements.</strong> Where required by applicable law, regulation or legal process.</li>
+    </ul>
+    <p>No Google user data is transferred to advertising platforms, data brokers or information resellers.</p>
+  </section>
+
+  <section id="limited-use">
+    <h2>6. Limited Use disclosure</h2>
+    <p>Jarvis's use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+    <p>In particular, Jarvis:</p>
+    <ul>
+      <li>uses Google user data only to provide and improve user-facing features that are prominent in Jarvis;</li>
+      <li>transfers Google user data only as needed to provide those features, to comply with applicable law, or as part of a merger, acquisition or sale of assets with notice to the user;</li>
+      <li>does not use or transfer Google user data for serving advertisements, including retargeting, personalized or interest-based advertising;</li>
+      <li>does not use Google user data to develop, improve or train generalized or non-personalized artificial-intelligence or machine-learning models;</li>
+      <li>does not allow humans to read Google user data, except the owner himself, with the owner's affirmative agreement for specific messages, for security purposes, or to comply with applicable law.</li>
+    </ul>
+  </section>
+
+  <section id="security">
+    <h2>7. How Google data is protected</h2>
+    <ul>
+      <li>Jarvis runs on a private, self-hosted server under the owner's physical and administrative control; it is not cloud hosted.</li>
+      <li>OAuth tokens are stored only on that server, protected by operating-system access controls.</li>
+      <li>Access to the running assistant requires authentication, and remote access is limited to the owner's private network and VPN.</li>
+      <li>Communication with Google APIs uses encrypted HTTPS connections.</li>
+      <li>Jarvis requests only the permissions listed in section 2, and every action that sends, deletes, shares, creates or edits data requires the owner's confirmation.</li>
+    </ul>
+  </section>
+
+  <section id="deletion">
+    <h2>8. Revoking access and deleting data</h2>
+    <ul>
+      <li><strong>Revoke access:</strong> remove “Jarvis” at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Jarvis immediately loses access to that Google account.</li>
+      <li><strong>Delete stored tokens:</strong> the owner can delete Jarvis's stored authorization tokens from the server at any time.</li>
+      <li><strong>Delete conversation history:</strong> the owner can delete any conversation containing excerpts of Google data from the server at any time.</li>
+    </ul>
+    <p>Because Jarvis does not keep its own copy of Google content, revoking access and deleting the tokens and conversation history removes all Google user data held by Jarvis.</p>
+  </section>
+
+  <section id="other">
+    <h2>9. Other information</h2>
+    <p>Jarvis does not use cookies, analytics or tracking on this website, and does not collect personal information from visitors to this website. Jarvis is not directed to children and is used only by its adult owner.</p>
+  </section>
+
+  <section id="changes">
+    <h2>10. Changes to this policy</h2>
+    <p>If this policy changes, the updated version will be posted on this page with a new “Last updated” date.</p>
+  </section>
+
+  <section id="contact">
+    <h2>11. Contact</h2>
+    <p>Questions about this policy or about how Jarvis handles Google user data: <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a></p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="inner">
+    <span>Jarvis · Private, self-hosted AI assistant · Not affiliated with Google.</span>
+    <span><a href="index.html">Home</a> · <a href="terms.html">Terms of Service</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

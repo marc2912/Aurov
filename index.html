@@ -3,176 +3,114 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jarvis</title>
-<meta name="description" content="A private, single-user connector that lets the owner's self-hosted AI assistant work with his own Google Workspace data.">
-<style>
-  :root {
-    --bg: #fbfbf9;
-    --fg: #1d1d1b;
-    --muted: #5c5c57;
-    --rule: #e3e2dc;
-    --accent: #2f5d8a;
-    --card: #ffffff;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141413;
-      --fg: #ecebe6;
-      --muted: #a3a29b;
-      --rule: #2e2d2a;
-      --accent: #8db4dc;
-      --card: #1c1c1a;
-    }
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
-  header h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.01em; }
-  header p.lede { color: var(--muted); margin: 0 0 24px; font-size: 1.05rem; }
-  nav { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 12px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 40px; }
-  nav a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
-  nav a:hover, nav a:focus { text-decoration: underline; }
-  section { margin: 0 0 56px; scroll-margin-top: 16px; }
-  h2 { font-size: 1.4rem; margin: 0 0 4px; }
-  h3 { font-size: 1.05rem; margin: 28px 0 6px; }
-  p, li { margin: 0 0 12px; }
-  ul { padding-left: 1.2rem; margin: 0 0 12px; }
-  .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 20px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
-  table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 0.95rem; }
-  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--rule); }
-  th { font-weight: 600; }
-  a { color: var(--accent); }
-  footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); padding-top: 20px; }
-  @media (max-width: 520px) {
-    .wrap { padding: 32px 16px 64px; }
-    header h1 { font-size: 1.6rem; }
-    table, thead, tbody, tr, th, td { display: block; }
-    thead { display: none; }
-    td { border-bottom: none; padding: 2px 0; }
-    tr { border-bottom: 1px solid var(--rule); padding: 8px 0; }
-    td:first-child { font-weight: 600; }
-  }
-</style>
+<title>Jarvis – Private, self-hosted AI assistant for Google Workspace</title>
+<meta name="description" content="Jarvis is a private, self-hosted AI assistant that helps its owner manage his own Gmail, Google Calendar, Google Drive, Docs, Sheets and Slides.">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
 
-<header>
-  <h1>Jarvis</h1>
-  <p class="lede">A private, single-user connector that lets its owner use his own self-hosted AI assistant with his own Google accounts. Nothing about the App is cloud hosted.</p>
-</header>
-
-<nav aria-label="Page sections">
-  <a href="#about">About</a>
-  <a href="#privacy">Privacy Policy</a>
-  <a href="#terms">Terms of Use</a>
-  <a href="#contact">Contact</a>
+<nav class="site-nav" aria-label="Site">
+  <div class="inner">
+    <a class="brand" href="index.html">Jarvis</a>
+    <div class="links">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </div>
 </nav>
 
-<!-- ============================ ABOUT / HOME ============================ -->
-<section id="about">
-  <h2>About this app</h2>
-  <p>Jarvis (the “App”) is a personal integration operated by a single individual (the “Owner”). It is not a public product and is not offered to anyone else.</p>
-  <p>The App connects an AI assistant that runs on a private server owned and operated by the Owner to the Owner's own Google accounts. None of the App's components are cloud hosted: the assistant, the connector and its credentials all run on that self-hosted server, which keeps them under the Owner's direct control for security and compliance reasons. When the Owner asks the assistant to do something, the App uses Google's APIs to carry it out, for example:</p>
-  <ul>
-    <li>summarizing or searching email, and drafting or sending replies the Owner approves;</li>
-    <li>checking availability and creating or updating calendar events;</li>
-    <li>finding, reading, creating and editing files in Google Drive, Docs, Sheets and Slides.</li>
-  </ul>
-  <p>Access is granted only through Google's standard sign-in and consent screen, and can be revoked at any time (see <a href="#privacy-revoke">How to revoke access</a>).</p>
-  <div class="card">
-    <strong>Who can use it:</strong> only the Owner. The App does not offer accounts, sign-ups or services to the public.
-  </div>
-</section>
+<main class="wrap">
 
-<!-- ============================ PRIVACY POLICY ============================ -->
-<section id="privacy">
-  <h2>Privacy Policy</h2>
-  <p class="meta">Effective date: October 6, 2026</p>
+  <section class="hero">
+    <h1>Jarvis</h1>
+    <p class="tagline">Jarvis is a private, self-hosted AI assistant that helps its owner work across his own Gmail, Google Calendar, Google Drive, Google Docs, Google Sheets and Google Slides, from one conversation.</p>
+    <ul class="badges" aria-label="Key facts">
+      <li>Single user</li>
+      <li>Self-hosted, not cloud hosted</li>
+      <li>Google data not stored by Jarvis</li>
+      <li>Owner approves every change</li>
+    </ul>
+  </section>
 
-  <h3>1. Scope</h3>
-  <p>This policy explains how the App accesses, uses, stores and shares data obtained from Google APIs. The only Google accounts the App is used with are accounts belonging to the Owner.</p>
+  <section id="what">
+    <h2>What Jarvis is</h2>
+    <p>Jarvis is a personal assistant application used by one person, its owner, with his own Google accounts. It is not a commercial product and is not available to the public: there are no sign-ups, no customer accounts and no other users.</p>
+    <p>Jarvis runs entirely on a private server that its owner owns and operates. No part of Jarvis is cloud hosted. Keeping the assistant, its connection to Google and its credentials on self-hosted infrastructure keeps them under the owner's direct control, for security and compliance reasons.</p>
+  </section>
 
-  <h3>2. Google data the App accesses</h3>
-  <p>With the Owner's consent on Google's authorization screen, the App may access the following data in the Owner's Google accounts:</p>
-  <table>
-    <thead><tr><th>Google service</th><th>Data accessed</th><th>Why</th></tr></thead>
-    <tbody>
-      <tr><td>Gmail</td><td>Messages, threads, labels, drafts, attachments</td><td>To search, summarize, draft, send and organize email at the Owner's request</td></tr>
-      <tr><td>Google Calendar</td><td>Calendars and events</td><td>To read the Owner's schedule and create or update events at the Owner's request</td></tr>
-      <tr><td>Google Drive</td><td>File names, metadata and contents</td><td>To find, read, create, organize and share files at the Owner's request</td></tr>
-      <tr><td>Google Docs, Sheets, Slides</td><td>Document, spreadsheet and presentation contents</td><td>To read, create and edit documents at the Owner's request</td></tr>
-      <tr><td>Basic profile</td><td>Email address and name</td><td>To identify which of the Owner's accounts is signed in</td></tr>
-    </tbody>
-  </table>
+  <section id="features">
+    <h2>What Jarvis does</h2>
+    <p>The owner asks Jarvis for help in plain language. Jarvis uses Google's official APIs to carry out the request in the owner's own Google account:</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Gmail</h3>
+        <p>Search and summarize email, surface what needs attention, draft replies, and send or organize messages once the owner approves.</p>
+      </div>
+      <div class="card">
+        <h3>Google Calendar</h3>
+        <p>Check the owner's schedule and availability, prepare for upcoming meetings, and create or update events once the owner approves.</p>
+      </div>
+      <div class="card">
+        <h3>Google Drive</h3>
+        <p>Find files by name or content, read them, and organize, upload or share them at the owner's request.</p>
+      </div>
+      <div class="card">
+        <h3>Google Docs</h3>
+        <p>Read and summarize documents, draft new documents and make edits the owner asks for.</p>
+      </div>
+      <div class="card">
+        <h3>Google Sheets</h3>
+        <p>Read spreadsheet data, answer questions about it, and create or update sheets the owner asks for.</p>
+      </div>
+      <div class="card">
+        <h3>Google Slides</h3>
+        <p>Review presentations and create or edit slides the owner asks for.</p>
+      </div>
+    </div>
+  </section>
 
-  <h3>3. How the data is used</h3>
-  <p>Google user data is used only to provide the features described above, at the Owner's direction. It is not used for advertising, is not sold, and is not used for any purpose unrelated to the Owner's own requests.</p>
+  <section id="how">
+    <h2>How Jarvis works</h2>
+    <ol>
+      <li><strong>The owner connects an account.</strong> Jarvis uses Google's standard sign-in and consent screen. The owner sees exactly which permissions are requested and can decline any of them.</li>
+      <li><strong>The owner asks for something.</strong> For example, “What's on my calendar tomorrow?” or “Draft a reply to the latest email from my accountant.”</li>
+      <li><strong>Jarvis fetches only what the request needs.</strong> It calls the relevant Google API, uses the result to answer, and does not keep its own copy of the owner's Google data.</li>
+      <li><strong>The owner approves changes.</strong> Before Jarvis sends, deletes, shares, creates or edits anything, it shows the owner what it will do and waits for confirmation.</li>
+    </ol>
+  </section>
 
-  <h3>4. Where the data is processed</h3>
-  <ul>
-    <li><strong>On the Owner's self-hosted server.</strong> The App runs entirely on a private server the Owner owns and operates; no part of it is cloud hosted. Data retrieved from Google is processed in memory to complete a request and is not persisted by the App. The only items stored are the OAuth authorization tokens, kept on that server so the App can stay signed in.</li>
-    <li><strong>AI model provider.</strong> To answer a request, the relevant portions of retrieved Google data (for example, an email's text) may be sent to the AI language-model provider the Owner has configured for the assistant, solely to generate a response for the Owner. That provider processes the data under its own terms and privacy policy.</li>
-    <li><strong>Google.</strong> Actions the Owner requests (such as sending an email or editing a document) are carried out through Google's APIs and stored by Google under Google's terms.</li>
-  </ul>
+  <section id="data">
+    <h2>Why Jarvis requests access to Google data</h2>
+    <p>Jarvis requests access to Gmail, Google Calendar, Google Drive, Google Docs, Google Sheets and Google Slides only so the owner can read, organize and act on his own email, schedule and files through the assistant. Jarvis does not use Google data for advertising, does not sell it, and does not use it to train AI or machine-learning models.</p>
+    <div class="callout">
+      The full details of what Jarvis accesses, how it is used and protected, and how to revoke access are in the <a href="privacy.html">Jarvis Privacy Policy</a>. Use of Jarvis is governed by the <a href="terms.html">Jarvis Terms of Service</a>.
+    </div>
+  </section>
 
-  <h3>5. Sharing</h3>
-  <p>Google user data is not shared, sold or transferred to anyone except: (a) the AI model provider described above, only as needed to fulfil the Owner's requests; (b) Google, to carry out requested actions; and (c) where required by law.</p>
+  <section id="security">
+    <h2>Security at a glance</h2>
+    <ul>
+      <li>Self-hosted on the owner's private server; nothing about Jarvis is cloud hosted.</li>
+      <li>Only Google authorization tokens are stored, on that server, with operating-system access controls.</li>
+      <li>Access to the running assistant requires authentication.</li>
+      <li>Access can be revoked at any time from the owner's Google Account (<a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>).</li>
+    </ul>
+  </section>
 
-  <h3>6. Limited Use disclosure</h3>
-  <p>The App's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. In particular, Google user data obtained by the App is not used to develop, improve or train generalized artificial-intelligence or machine-learning models, is not used for advertising, and is not read by humans except with the Owner's own access, for security purposes, or as required by law.</p>
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Questions about Jarvis: <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a></p>
+  </section>
 
-  <h3>7. Retention and deletion</h3>
-  <p>The App does not persist Google user data. Content retrieved from Google is used only to complete the request at hand and is not written to storage. OAuth authorization tokens are stored on the Owner's server until access is revoked or the tokens are deleted.</p>
-
-  <h3 id="privacy-revoke">8. How to revoke access</h3>
-  <p>Access can be revoked at any time at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a> by removing “Jarvis”. Revoking access stops the App from reaching that Google account immediately. Stored tokens can also be deleted from the server running the App.</p>
-
-  <h3>9. Security</h3>
-  <p>Authorization tokens are stored only on the Owner's self-hosted server, protected by operating-system access controls, and access to the App's running service requires authentication. Only the minimum Google permissions needed for the features above are requested.</p>
-
-  <h3>10. Changes</h3>
-  <p>If this policy changes, the updated version will be posted on this page with a new effective date.</p>
-</section>
-
-<!-- ============================ TERMS OF USE ============================ -->
-<section id="terms">
-  <h2>Terms of Use</h2>
-  <p class="meta">Effective date: October 6, 2026</p>
-
-  <h3>1. Personal use only</h3>
-  <p>The App is a private tool for the Owner's own use with the Owner's own Google accounts. No one else is authorized to use it, sign in to it, or connect accounts to it.</p>
-
-  <h3>2. No warranty</h3>
-  <p>The App is provided “as is”, without warranties of any kind. AI-generated output can be wrong; actions that send, delete, share or modify data are confirmed by the Owner before they are carried out.</p>
-
-  <h3>3. Third-party services</h3>
-  <p>Use of Google services through the App remains subject to Google's terms, and use of the AI model provider remains subject to that provider's terms.</p>
-
-  <h3>4. Limitation of liability</h3>
-  <p>To the extent permitted by law, the Owner is not liable for any loss arising from use of the App.</p>
-
-  <h3>5. Changes</h3>
-  <p>These terms may be updated by posting a new version on this page.</p>
-</section>
-
-<!-- ============================ CONTACT ============================ -->
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Questions about this App or this policy: <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a></p>
-</section>
+</main>
 
 <footer>
-  <p>Jarvis · Not affiliated with Google.</p>
+  <div class="inner">
+    <span>Jarvis · Private, self-hosted AI assistant · Not affiliated with Google.</span>
+    <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
+  </div>
 </footer>
 
-</div>
 </body>
 </html>
