@@ -3,425 +3,176 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aurov Suspension Model</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<title>Jarvis</title>
+<meta name="description" content="A private, single-user connector that lets the owner's self-hosted AI assistant work with his own Google Workspace data.">
 <style>
-/* Layout: one working bench. Controls strip above a full-width 3D viewport, legend below. */
-:root{
-  --bg:#f3f4f2; --panel:#ffffff; --fg:#1c2226; --muted:#5b666d; --line:#d5dad8;
-  --pitch:#c27a0e; --roll:#1f6fb5; --accent:#2f5d50; --scene:#e9ecea;
-  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#14181a; --panel:#1c2124; --fg:#e4e9ea; --muted:#9aa6ab; --line:#2e3639;
-  --pitch:#e39a2a; --roll:#4f9be0; --accent:#7fb8a6; --scene:#1a1f22; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#14181a; --panel:#1c2124; --fg:#e4e9ea; --muted:#9aa6ab; --line:#2e3639;
-  --pitch:#e39a2a; --roll:#4f9be0; --accent:#7fb8a6; --scene:#1a1f22; color-scheme:dark}
-html,body{height:auto}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;padding-block:20px 32px;padding-inline:16px}
-.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-h1{font-size:1.5rem;font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.01em}
-.sub{color:var(--muted);margin:0;max-width:70ch}
-.bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:10px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.panel h3{margin:0;font-size:13px;font-weight:600;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
-.panel h3 .note{font-weight:400;color:var(--muted);font-size:12.5px}
-.row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
-.row .lbl{min-width:6.5ch}
-.end{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-.val.wide{min-width:17ch}
-.btn.primary{background:var(--accent);color:var(--panel);border-color:var(--accent);min-width:6.5em}
-.panel.off .row{opacity:.45}
-.row.off{opacity:.45}
-button:disabled,input:disabled{cursor:not-allowed}
-.group{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.lbl{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:4px}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{font:inherit;font-size:13.5px;background:transparent;color:var(--fg);border:0;padding:6px 11px;cursor:pointer}
-.seg button+button{border-left:1px solid var(--line)}
-.seg button[aria-pressed="true"]{background:var(--accent);color:var(--panel)}
-.seg button:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--roll);outline-offset:2px}
-.btn{font:inherit;font-size:13.5px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:8px;padding:6px 11px;cursor:pointer}
-input[type=range]{width:150px;accent-color:var(--accent)}
-.val{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;min-width:4.5ch}
-.stage{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--scene);aspect-ratio:16/10;max-height:72vh;width:100%}
-#view{display:block;width:100%;height:100%}
-.tilt{position:absolute;right:10px;top:10px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:6px 9px;pointer-events:none;line-height:1.45}
-.tilt b{font-family:var(--sans);font-weight:600;font-size:12px;display:block;color:var(--muted)}
-.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
-.card h2{font-size:14px;font-weight:600;margin:0 0 6px;display:flex;align-items:center;gap:8px}
-.card p{margin:0;color:var(--muted);font-size:14px}
-.sw{width:14px;height:14px;border-radius:50%;flex:none}
-.sw.p{background:var(--pitch)} .sw.r{background:var(--roll)} .sw.a{background:#b8452f} .sw.v{background:#6f7b80}
-.count{font-family:var(--mono);font-size:13px;color:var(--fg)}
-[hidden]{display:none!important}
-.group.off{opacity:.45}
-.err{padding:24px;color:var(--muted)}
-.tags{position:absolute;inset:0;pointer-events:none}
-.tag{position:absolute;transform:translate(-50%,-100%);font-family:var(--mono);font-size:11.5px;font-variant-numeric:tabular-nums;padding:1px 5px;border-radius:5px;background:var(--panel);color:var(--fg);border:1px solid var(--line);white-space:nowrap}
-.tag.lean{border-color:var(--pitch);color:var(--pitch)}
-@media (max-width:520px){input[type=range]{width:120px}.stage{aspect-ratio:4/5}}
+  :root {
+    --bg: #fbfbf9;
+    --fg: #1d1d1b;
+    --muted: #5c5c57;
+    --rule: #e3e2dc;
+    --accent: #2f5d8a;
+    --card: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413;
+      --fg: #ecebe6;
+      --muted: #a3a29b;
+      --rule: #2e2d2a;
+      --accent: #8db4dc;
+      --card: #1c1c1a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+  header h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.01em; }
+  header p.lede { color: var(--muted); margin: 0 0 24px; font-size: 1.05rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 12px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 40px; }
+  nav a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+  nav a:hover, nav a:focus { text-decoration: underline; }
+  section { margin: 0 0 56px; scroll-margin-top: 16px; }
+  h2 { font-size: 1.4rem; margin: 0 0 4px; }
+  h3 { font-size: 1.05rem; margin: 28px 0 6px; }
+  p, li { margin: 0 0 12px; }
+  ul { padding-left: 1.2rem; margin: 0 0 12px; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 0.95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+  th { font-weight: 600; }
+  a { color: var(--accent); }
+  footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); padding-top: 20px; }
+  @media (max-width: 520px) {
+    .wrap { padding: 32px 16px 64px; }
+    header h1 { font-size: 1.6rem; }
+    table, thead, tbody, tr, th, td { display: block; }
+    thead { display: none; }
+    td { border-bottom: none; padding: 2px 0; }
+    tr { border-bottom: 1px solid var(--rule); padding: 8px 0; }
+    td:first-child { font-weight: 600; }
+  }
 </style>
-
+</head>
+<body>
 <div class="wrap">
-  <header>
-    <h1>Aurov Suspension Model</h1>
-  </header>
 
-  <div class="bar" aria-label="Model controls">
-    <section class="panel" aria-labelledby="hDrive"><h3 id="hDrive">Drive</h3>
-      <div class="row"><button class="btn primary" id="drive">Drive</button><button class="btn" id="reset">Reset</button></div>
-      <div class="row"><span class="lbl">Speed</span><input type="range" id="speed" min="-0.8" max="0.8" step="0.05" value="0.35" aria-label="Speed in metres per second, negative is reverse"><span class="val wide" id="speedv">0.35 m/s forward</span></div>
-    </section>
-    <section class="panel" aria-labelledby="hSteer"><h3 id="hSteer">Steering</h3>
-      <div class="row"><div class="seg" id="steer">
-        <button data-m="straight" aria-pressed="true">Straight</button>
-        <button data-m="crab" aria-pressed="false">Crab</button>
-        <button data-m="spin" aria-pressed="false">Spin</button>
-        <button data-m="turn" aria-pressed="false">Turn</button>
-      </div></div>
-      <div class="row" id="amtRow"><span class="lbl" id="amtL">Amount</span><span class="end">L</span><input type="range" id="amt" min="-100" max="100" step="5" value="0" aria-label="Steering direction and amount, left to right"><span class="end">R</span><span class="val wide" id="amtv">—</span></div>
-    </section>
+<header>
+  <h1>Jarvis</h1>
+  <p class="lede">A private, single-user connector that lets its owner use his own self-hosted AI assistant with his own Google accounts. Nothing about the App is cloud hosted.</p>
+</header>
+
+<nav aria-label="Page sections">
+  <a href="#about">About</a>
+  <a href="#privacy">Privacy Policy</a>
+  <a href="#terms">Terms of Use</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- ============================ ABOUT / HOME ============================ -->
+<section id="about">
+  <h2>About this app</h2>
+  <p>Jarvis (the “App”) is a personal integration operated by a single individual (the “Owner”). It is not a public product and is not offered to anyone else.</p>
+  <p>The App connects an AI assistant that runs on a private server owned and operated by the Owner to the Owner's own Google accounts. None of the App's components are cloud hosted: the assistant, the connector and its credentials all run on that self-hosted server, which keeps them under the Owner's direct control for security and compliance reasons. When the Owner asks the assistant to do something, the App uses Google's APIs to carry it out, for example:</p>
+  <ul>
+    <li>summarizing or searching email, and drafting or sending replies the Owner approves;</li>
+    <li>checking availability and creating or updating calendar events;</li>
+    <li>finding, reading, creating and editing files in Google Drive, Docs, Sheets and Slides.</li>
+  </ul>
+  <p>Access is granted only through Google's standard sign-in and consent screen, and can be revoked at any time (see <a href="#privacy-revoke">How to revoke access</a>).</p>
+  <div class="card">
+    <strong>Who can use it:</strong> only the Owner. The App does not offer accounts, sign-ups or services to the public.
   </div>
+</section>
 
-  <div class="stage"><canvas id="view" aria-label="3D model of the rover driving over rocks"></canvas><div class="tags" id="tags"></div><div class="tilt" id="tilt" aria-live="off"></div></div>
+<!-- ============================ PRIVACY POLICY ============================ -->
+<section id="privacy">
+  <h2>Privacy Policy</h2>
+  <p class="meta">Effective date: October 6, 2026</p>
+
+  <h3>1. Scope</h3>
+  <p>This policy explains how the App accesses, uses, stores and shares data obtained from Google APIs. The only Google accounts the App is used with are accounts belonging to the Owner.</p>
+
+  <h3>2. Google data the App accesses</h3>
+  <p>With the Owner's consent on Google's authorization screen, the App may access the following data in the Owner's Google accounts:</p>
+  <table>
+    <thead><tr><th>Google service</th><th>Data accessed</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Gmail</td><td>Messages, threads, labels, drafts, attachments</td><td>To search, summarize, draft, send and organize email at the Owner's request</td></tr>
+      <tr><td>Google Calendar</td><td>Calendars and events</td><td>To read the Owner's schedule and create or update events at the Owner's request</td></tr>
+      <tr><td>Google Drive</td><td>File names, metadata and contents</td><td>To find, read, create, organize and share files at the Owner's request</td></tr>
+      <tr><td>Google Docs, Sheets, Slides</td><td>Document, spreadsheet and presentation contents</td><td>To read, create and edit documents at the Owner's request</td></tr>
+      <tr><td>Basic profile</td><td>Email address and name</td><td>To identify which of the Owner's accounts is signed in</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3. How the data is used</h3>
+  <p>Google user data is used only to provide the features described above, at the Owner's direction. It is not used for advertising, is not sold, and is not used for any purpose unrelated to the Owner's own requests.</p>
+
+  <h3>4. Where the data is processed</h3>
+  <ul>
+    <li><strong>On the Owner's self-hosted server.</strong> The App runs entirely on a private server the Owner owns and operates; no part of it is cloud hosted. Data retrieved from Google is processed in memory to complete a request and is not persisted by the App. The only items stored are the OAuth authorization tokens, kept on that server so the App can stay signed in.</li>
+    <li><strong>AI model provider.</strong> To answer a request, the relevant portions of retrieved Google data (for example, an email's text) may be sent to the AI language-model provider the Owner has configured for the assistant, solely to generate a response for the Owner. That provider processes the data under its own terms and privacy policy.</li>
+    <li><strong>Google.</strong> Actions the Owner requests (such as sending an email or editing a document) are carried out through Google's APIs and stored by Google under Google's terms.</li>
+  </ul>
+
+  <h3>5. Sharing</h3>
+  <p>Google user data is not shared, sold or transferred to anyone except: (a) the AI model provider described above, only as needed to fulfil the Owner's requests; (b) Google, to carry out requested actions; and (c) where required by law.</p>
+
+  <h3>6. Limited Use disclosure</h3>
+  <p>The App's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. In particular, Google user data obtained by the App is not used to develop, improve or train generalized artificial-intelligence or machine-learning models, is not used for advertising, and is not read by humans except with the Owner's own access, for security purposes, or as required by law.</p>
+
+  <h3>7. Retention and deletion</h3>
+  <p>The App does not persist Google user data. Content retrieved from Google is used only to complete the request at hand and is not written to storage. OAuth authorization tokens are stored on the Owner's server until access is revoked or the tokens are deleted.</p>
+
+  <h3 id="privacy-revoke">8. How to revoke access</h3>
+  <p>Access can be revoked at any time at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a> by removing “Jarvis”. Revoking access stops the App from reaching that Google account immediately. Stored tokens can also be deleted from the server running the App.</p>
+
+  <h3>9. Security</h3>
+  <p>Authorization tokens are stored only on the Owner's self-hosted server, protected by operating-system access controls, and access to the App's running service requires authentication. Only the minimum Google permissions needed for the features above are requested.</p>
+
+  <h3>10. Changes</h3>
+  <p>If this policy changes, the updated version will be posted on this page with a new effective date.</p>
+</section>
+
+<!-- ============================ TERMS OF USE ============================ -->
+<section id="terms">
+  <h2>Terms of Use</h2>
+  <p class="meta">Effective date: October 6, 2026</p>
+
+  <h3>1. Personal use only</h3>
+  <p>The App is a private tool for the Owner's own use with the Owner's own Google accounts. No one else is authorized to use it, sign in to it, or connect accounts to it.</p>
+
+  <h3>2. No warranty</h3>
+  <p>The App is provided “as is”, without warranties of any kind. AI-generated output can be wrong; actions that send, delete, share or modify data are confirmed by the Owner before they are carried out.</p>
+
+  <h3>3. Third-party services</h3>
+  <p>Use of Google services through the App remains subject to Google's terms, and use of the AI model provider remains subject to that provider's terms.</p>
+
+  <h3>4. Limitation of liability</h3>
+  <p>To the extent permitted by law, the Owner is not liable for any loss arising from use of the App.</p>
+
+  <h3>5. Changes</h3>
+  <p>These terms may be updated by posting a new version on this page.</p>
+</section>
+
+<!-- ============================ CONTACT ============================ -->
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Questions about this App or this policy: <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a></p>
+</section>
+
+<footer>
+  <p>Jarvis · Not affiliated with Google.</p>
+</footer>
+
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script>
-(function(){
-const canvas=document.getElementById('view');
-if(!window.THREE){canvas.parentElement.innerHTML='<p class="err">The 3D library did not load. Reload the page to try again.</p>';return;}
-const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(38,1,0.01,60);
-const controls=THREE.OrbitControls?new THREE.OrbitControls(camera,canvas):null;
-if(controls){controls.enableDamping=true;controls.maxPolarAngle=Math.PI*0.49;controls.minDistance=0.6;controls.maxDistance=6;}
-
-scene.add(new THREE.HemisphereLight(0xffffff,0x667070,0.75));
-const sun=new THREE.DirectionalLight(0xffffff,0.75);sun.position.set(2,3,1.5);scene.add(sun);
-
-// palette (scene colors fixed so parts read the same in both themes; background follows theme)
-const M=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.6,metalness:.15},o));
-const mat={
-  chassis:M(0x8fa3a8,{transparent:true,opacity:.55}), frame:M(0x9aa5a8,{metalness:.5,roughness:.35}),
-  arm:M(0x6f7b80,{metalness:.5,roughness:.4}), tire:M(0x23272a,{roughness:.9}), hub:M(0xb7bec1,{metalness:.6,roughness:.3}),
-  pitch:M(0xd08a12,{roughness:.35,metalness:.3}), roll:M(0x2f7fcf,{roughness:.35,metalness:.3}),
-  motor:M(0x4a5559,{metalness:.5}), act:M(0xb8452f,{metalness:.35,roughness:.4}), rod:M(0xd9dde0,{metalness:.8,roughness:.2}),
-  rock:M(0xa89574,{roughness:.95}), ground:M(0x7f8a86,{roughness:1})
-};
-
-scene.fog=new THREE.Fog(0xe9ecea,9,19);
-
-// helpers
-function box(w,h,d,m,x=0,y=0,z=0){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);return o;}
-function cyl(r,len,m,axis,x=0,y=0,z=0,seg=24){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,seg),m);
-  if(axis==='x')o.rotation.z=Math.PI/2; if(axis==='z')o.rotation.x=Math.PI/2; o.position.set(x,y,z);return o;}
-function beamBetween(a,b,t,m){const d=new THREE.Vector3().subVectors(b,a);const o=box(d.length(),t,t,m);
-  o.position.copy(a).addScaledVector(d,.5);o.rotation.z=Math.atan2(d.y,d.x);return o;}
-// hinge: bearing housing ring + shaft stub, colored by what it lets move
-function hinge(kind,x,y,z){const g=new THREE.Group();const m=kind==='pitch'?mat.pitch:mat.roll;const ax=kind==='pitch'?'z':'x';
-  g.add(cyl(0.026,0.05,m,ax));g.add(cyl(0.009,0.09,mat.hub,ax));g.position.set(x,y,z);return g;}
-const _ya=new THREE.Vector3(0,1,0);
-function placeCyl(m,a,b){const d=new THREE.Vector3().subVectors(b,a);m.scale.set(1,Math.max(d.length(),1e-4),1);m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(_ya,d.normalize());}
-
-// dimensions (metres)
-const R=0.10,W=0.05,HALF=0.15,PIV=0.30,TRACK=0.30,XR=-0.40,XF=0.40;   // rocker legs reach 40 cm fore and aft, so the inner wheels of the two bogies clear each other
-const YM=0.35,YU2=0.39,YL2=0.31,VTOP=0.50,OFF=0.045;   // rocker apex, parallelogram pins, V-arm tips, rocker offset outboard
-const steerGroups=[];
-
-// ---- rover pose on the ground plane: position (PX, PZ) and heading PSI (turning about the vertical). The linkage is solved in the rover's own frame ----
-let PX=0,PZ=0,PSI=0;
-let cP=1,sP=0;
-const toW=(lx,lz)=>[PX+lx*cP+lz*sP,PZ-lx*sP+lz*cP];
-
-// ---- terrain: endless landscape. Ground height G(x,z) = rolling hills + ridges + small bumps, flattened near the start;
-// rounded rocks sit on top, denser in rocky zones. Everything comes from hashes of position, so it is the same every time you pass.
-function rng(i,j){let t=(Math.imul(i,73856093)^Math.imul(j,19349663)^0x5bd1e995)>>>0;
-  return ()=>{t=(t+0x6D2B79F5)>>>0;let r=Math.imul(t^(t>>>15),1|t);r=(r+Math.imul(r^(r>>>7),61|r))^r;return ((r^(r>>>14))>>>0)/4294967296;};}
-function h2(i,j,s){let t=(Math.imul(i,374761393)+Math.imul(j,668265263)+Math.imul(s,2147483647))|0;t=Math.imul(t^(t>>>13),1274126177);return ((t^(t>>>16))>>>0)/4294967296;}
-function vnoise(x,z,s){const i=Math.floor(x),j=Math.floor(z),fx=x-i,fz=z-j,u=fx*fx*(3-2*fx),w=fz*fz*(3-2*fz);
-  const a=h2(i,j,s),b=h2(i+1,j,s),c=h2(i,j+1,s),d=h2(i+1,j+1,s);return a+(b-a)*u+(c-a)*w+(a-b-c+d)*u*w;}
-const smooth=(e0,e1,x)=>{const t=Math.max(0,Math.min(1,(x-e0)/(e1-e0)));return t*t*(3-2*t);};
-// terrain types blend by region: gentle meadow, big rolling hills, sharp ridges and gullies
-function region(x,z){return {hilly:smooth(0.1,0.5,vnoise(x/20,z/20,1)),ridgy:smooth(0.3,0.65,vnoise(x/18+40,z/18,2)),rocky:vnoise(x/12+90,z/12,3)};}
-function G(x,z){const r=region(x,z),start=0.25+0.75*smooth(1.5,6,Math.hypot(x,z));
-  const hills=(1.0+2.4*r.hilly)*(vnoise(x/8,z/8,4)-0.5);
-  const knolls=(0.3+0.5*r.hilly)*(vnoise(x/3,z/3,7)-0.5);
-  const ridge=1.0*r.ridgy*(0.5-Math.abs(2*vnoise(x/5.5+17,z/5.5,5)-1));
-  const bumps=0.08*(vnoise(x/1.4,z/1.4,6)-0.5);
-  return start*(hills+knolls+ridge+bumps);}
-
-// rocks: the ground is split into 1.4 m cells, and every rock stays inside its own cell, so a height lookup only has to check one cell.
-// Each rock is an ellipsoid sunk partway into the ground at its centre height gc; its upper half is the rock surface.
-const CELL=1.4,SINK=0.6,KS=Math.sqrt(1-(SINK/(1+SINK))**2),cells=new Map();
-function cell(i,j){const key=(i+50000)*100000+(j+50000);let c=cells.get(key);if(c)return c;
-  const q=rng(i,j),cx=(i+0.5)*CELL,cz=(j+0.5)*CELL,rk=region(cx,cz).rocky,u=q();
-  const n=rk<0.3?(u<0.4?1:u<0.8?2:3):rk<0.55?(u<0.3?2:u<0.7?3:4):(u<0.3?4:u<0.7?5:6);   // meadow, scattered, rock field
-  const rocks=[];
-  for(let k=0;k<n;k++){const big=rk>0.45&&q()<0.35,bx=(big?0.2:0.12)+(big?0.28:0.24)*q(),bz=(big?0.18:0.1)+(big?0.24:0.2)*q(),h=(big?0.1:0.04)+(big?0.14:0.14)*q(),ax=bx/KS,az=bz/KS;
-    const x=i*CELL+ax+(CELL-2*ax)*q(),z=j*CELL+az+(CELL-2*az)*q();
-    if(Math.hypot(x,z)<1.4)continue;                        // keep the start clear
-    rocks.push({x,z,ax,az,c:h*(1+SINK),s:h*SINK,gc:G(x,z),tint:q()});}
-  c={rocks,meshes:null};cells.set(key,c);return c;}
-const rockGeo=new THREE.SphereGeometry(1,36,24);
-const rockMats=[0xa89574,0x9a8c78,0xb3a384,0x8f8676].map(c=>M(c,{roughness:.95}));
-// add rock meshes near the rover, drop far ones
-function streamRocks(){const i0=Math.floor(PX/CELL),j0=Math.floor(PZ/CELL),N=9;
-  for(let i=i0-N;i<=i0+N;i++)for(let j=j0-N;j<=j0+N;j++){const c=cell(i,j);if(!c.meshes){c.meshes=c.rocks.map(r=>{const m=new THREE.Mesh(rockGeo,rockMats[Math.floor(r.tint*4)]);m.scale.set(r.ax,r.c,r.az);m.position.set(r.x,r.gc-r.s,r.z);scene.add(m);return m;});}}
-  cells.forEach((c,key)=>{const i=Math.floor(key/100000)-50000,j=key%100000-50000;
-    if(Math.abs(i-i0)>N+2||Math.abs(j-j0)>N+2){if(c.meshes)c.meshes.forEach(m=>scene.remove(m));cells.delete(key);}});
-  ensureGround();}
-// ground mesh: a 36 m square around the rover, rebuilt when the rover gets 4 m from its centre; the grid texture is 1 m squares in world space
-const GS=36,GN=180;let gX=1e9,gZ=1e9;
-const gridTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,128,128);
-  x.strokeStyle='rgba(0,0,0,.16)';x.lineWidth=2;x.strokeRect(0,0,128,128);x.strokeStyle='rgba(0,0,0,.06)';x.lineWidth=1;
-  for(let k=1;k<5;k++){x.beginPath();x.moveTo(k*25.6,0);x.lineTo(k*25.6,128);x.moveTo(0,k*25.6);x.lineTo(128,k*25.6);x.stroke();}
-  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t;})();
-const groundGeo=new THREE.PlaneGeometry(GS,GS,GN,GN);groundGeo.rotateX(-Math.PI/2);
-groundGeo.setAttribute('color',new THREE.BufferAttribute(new Float32Array(groundGeo.attributes.position.count*3),3));
-const ground=new THREE.Mesh(groundGeo,new THREE.MeshStandardMaterial({color:0xffffff,map:gridTex,vertexColors:true,roughness:1}));scene.add(ground);
-const gBase=groundGeo.attributes.position.array.slice();
-function ensureGround(){if(Math.abs(PX-gX)<4&&Math.abs(PZ-gZ)<4)return;gX=Math.round(PX);gZ=Math.round(PZ);
-  const P=groundGeo.attributes.position,UV=groundGeo.attributes.uv,C=groundGeo.attributes.color;
-  for(let k=0;k<P.count;k++){const x=gBase[3*k]+gX,z=gBase[3*k+2]+gZ,y=G(x,z),r=region(x,z);
-    P.setXYZ(k,x,y,z);UV.setXY(k,x,-z);
-    const g=0.5+0.08*Math.max(-1,Math.min(1,y*1.5)),grass=0.5*(1-r.rocky)*(1-r.ridgy);   // greener meadows, greyer ridges and rock fields
-    C.setXYZ(k,g+0.08-0.07*grass,g+0.05+0.04*grass,g-0.04*grass);}
-  P.needsUpdate=UV.needsUpdate=C.needsUpdate=true;groundGeo.computeVertexNormals();groundGeo.computeBoundingSphere();}
-// height of rocks alone at a world point (-Infinity where there is none)
-function rockAt(x,z){let h=-Infinity;
-  for(const r of cell(Math.floor(x/CELL),Math.floor(z/CELL)).rocks){const u=(x-r.x)/r.ax,w=(z-r.z)/r.az,q=1-u*u-w*w;if(q>0)h=Math.max(h,r.gc-r.s+r.c*Math.sqrt(q));}
-  return h;}
-// how high a wheel's lowest point must sit so the tire just touches the ground or rocks (tire profile swept over the terrain); x, z in the rover's frame
-// The ground is smooth, so a coarser sweep is enough for it; rocks get the fine sweep.
-let swC=1,swS=0;   // direction the tire rolls in the rover's frame (turns with the crab angle)
-function floorFor(x,z){let best=-Infinity;for(let i=-8;i<=8;i++){const d=R*i/8,lift=Math.sqrt(Math.max(0,R*R-d*d))-R;
-  if(i%2===0){const w=toW(x+d*swC,z-d*swS);best=Math.max(best,G(w[0],w[1])+lift);}
-  for(const e of [-0.02,0,0.02]){const w=toW(x+d*swC+e*swS,z-d*swS+e*swC),v=rockAt(w[0],w[1])+lift;if(v>best)best=v;}}return best;}
-
-// bogie: origin at its hinge. Two arms down to steering posts, fork, wheel, drive motor.
-function bogie(side,xc){
-  const g=new THREE.Group();g.userData.xc=xc;
-  g.add(hinge('pitch',0,0,0));
-  [-1,1].forEach(s=>{
-    const end=new THREE.Vector3(s*HALF,-0.06,0);
-    g.add(beamBetween(new THREE.Vector3(0,0,0),end,0.022,mat.arm));
-    g.add(cyl(0.012,0.04,mat.hub,'y',end.x,end.y-0.02,0)); // steering post
-    const st=new THREE.Group();st.position.set(end.x,-0.09,0);
-    st.add(box(0.03,0.012,0.11,mat.frame,0,0,0));             // fork crown
-    [-1,1].forEach(k=>st.add(box(0.025,0.12,0.008,mat.frame,0,-0.055,k*0.047))); // fork legs
-    const tire=new THREE.Mesh(new THREE.TorusGeometry(R-0.022,0.024,14,36),mat.tire);tire.position.set(0,-0.11,0);st.add(tire);
-    st.add(cyl(R-0.03,W*0.8,mat.hub,'z',0,-0.11,0));
-    st.add(cyl(0.028,0.05,mat.motor,'z',-0.05*s,-0.03,side*0.075)); // drive motor + belt side
-    g.add(st);steerGroups.push({g:st,side,s,tire});
-  });
-  return g;
-}
-// rocker: wide inverted V, apex hinge at its origin, a bogie hanging from each end
-function rocker(side){const g=new THREE.Group();g.add(hinge('pitch',0,0,0));
-  [-1,1].forEach(k=>g.add(beamBetween(new THREE.Vector3(0,0,0),new THREE.Vector3(k*XF,PIV-YM,0),0.026,mat.arm)));
-  const f=bogie(side,XF),r=bogie(side,XR);f.position.set(XF,PIV-YM,0);r.position.set(XR,PIV-YM,0);g.add(f,r);
-  g.userData.f=f;g.userData.r=r;return g;}
-
-// ---- rig: the keel frame holds the centre post. The actuators keep it level, so it only moves up/down and along the path ----
-const rov=new THREE.Group();scene.add(rov);
-const K=new THREE.Group();rov.add(K);
-K.add(box(0.03,0.15,0.03,mat.frame,-0.03,0.325,0));                              // centre post
-K.add(hinge('roll',0,YU2,0),hinge('roll',0,YL2,0));
-const upB=new THREE.Group();upB.position.set(0,YU2,0);upB.add(box(0.03,0.03,0.60,mat.frame));K.add(upB);
-const loB=new THREE.Group();loB.position.set(0,YL2,0);loB.add(box(0.03,0.03,0.60,mat.frame));K.add(loB);
-function upright(side){const g=new THREE.Group();g.add(box(0.03,0.11,0.025,mat.frame));
-  g.add(hinge('roll',0,YU2-YM,0),hinge('roll',0,YL2-YM,0));
-  const rk=rocker(side);rk.position.set(0,0,side*OFF);g.add(rk);g.userData.rk=rk;return g;}
-const uP=upright(1),uN=upright(-1);K.add(uP,uN);
-const rkP=uP.userData.rk,rkN=uN.userData.rk;
-const BOG=[rkP.userData.f,rkP.userData.r,rkN.userData.f,rkN.userData.r];
-
-// chassis: held level by the actuators, so it moves only with the keel
-const cb=new THREE.Group();cb.position.set(0,YU2,0);K.add(cb);
-const chassisMesh=box(1.05,0.12,0.40,mat.chassis,0,VTOP+0.06-YU2,0);cb.add(chassisMesh);
-// chassis bolted to the top of the centre post (post extended up to it), braced fore and aft so it clears the swinging top beam
-const postMount=new THREE.Group();K.add(postMount);
-postMount.add(box(0.036,VTOP-0.40,0.036,mat.frame,-0.03,(VTOP+0.40)/2,0));
-[-1,1].forEach(j=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(0.011,0.011,1,10),mat.arm);placeCyl(m,new THREE.Vector3(-0.03,0.42,0),new THREE.Vector3(j*0.22,VTOP,0));postMount.add(m);});
-postMount.add(box(0.5,0.012,0.10,mat.frame,0,VTOP-0.006,0));
-// tilt sensor (IMU) on the chassis: the roll and pitch actuators drive it to read level
-const imuMat=M(0x2a9d6f,{roughness:.4});cb.add(box(0.07,0.025,0.05,imuMat,0.2,VTOP-YU2+0.0125,0.08));
-
-// leveling actuators (lead-screw type): housing + extending rod drawn between two points
-function makeAct(parent,L0){const h=new THREE.Mesh(new THREE.CylinderGeometry(0.016,0.016,1,14),mat.act),r=new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,1,10),mat.rod);
-  parent.add(h,r);return {h,r,L0,len:L0};}
-function setAct(ac,a,b){const d=new THREE.Vector3().subVectors(b,a),L=d.length(),HL=Math.min(0.10,L*0.6);
-  placeCyl(ac.h,a,a.clone().addScaledVector(d,HL/L));placeCyl(ac.r,a.clone().addScaledVector(d,(HL-0.01)/L),b);ac.len=L;}
-// every actuator end sits on a clevis pin that is part of a bracket welded to the member it pushes on
-const pin=(parent,axis,x,y,z,len=0.034)=>parent.add(cyl(0.007,len,mat.hub,axis,x,y,z,12));
-// roll actuator: lug on the post foot (joined to the post) up to a lug on the top beam, 15 cm out
-K.add(box(0.075,0.05,0.03,mat.frame,0.0075,0.265,0));                             // post foot, welded across the bottom of the post
-pin(K,'x',0.03,0.25,0);
-upB.add(box(0.045,0.026,0.026,mat.frame,0.0225,0,TRACK/2));pin(upB,'x',0.03,0,TRACK/2);   // lug on the top beam
-const rollAct=makeAct(K,Math.hypot(YU2-0.25,TRACK/2));
-// pitch actuator: bracket on the right upright (spaced out to the actuator plane) down to a pin on the right rocker's front arm
-const PZ_=0.075,PX_=0.14,PY_=(PIV-YM)*PX_/XF;                                      // actuator plane, and where it meets the rocker arm
-uP.add(box(0.03,0.03,PZ_+0.0225,mat.frame,0,0.05,(PZ_+0.0225)/2-0.0125));          // spacer from the upright out to the bracket
-const pb=beamBetween(new THREE.Vector3(0,0.05,0),new THREE.Vector3(PX_,0.11,0),0.02,mat.frame);pb.position.z=PZ_;uP.add(pb);
-pin(uP,'z',PX_,0.11,PZ_);
-pin(rkP,'z',PX_,PY_,(PZ_-OFF)/2+0.004,PZ_-OFF+0.024);                                // pin through the rocker arm, sticking out to the actuator plane
-const pitchAct=makeAct(uP,0.11-PY_);
-
-// ---- state ----
-let mode='straight',driving=false,speed=0.35,v=[0,0,0,0,0,0,0,0];
-
-// steering: each wheel's target angle, and how the rover body moves (forward speed along its x, sideways along z, turn rate)
-// amt: each mode's own setting, -1 (full left) to +1 (full right). Right is +z; a wheel's rotation.y > 0 points it left.
-const amt={straight:0,crab:0.5,spin:1,turn:0.5},CRABMAX=90*Math.PI/180,RMIN=0.9,RSPIN=Math.hypot(XF+HALF,TRACK+OFF);
-const crabAngle=()=>amt.crab*CRABMAX;                               // + = crab to the right
-const turnCentre=()=>Math.abs(amt.turn)<0.02?null:RMIN/amt.turn;  // z of the turn centre (+ = right), radius RMIN at full lock
-function steerAngle(x,z){
-  if(mode==='crab')return -crabAngle();
-  if(mode==='spin')return Math.atan(x/z);          // every wheel tangent to a circle round the centre
-  if(mode==='turn'){const zc=turnCentre();return zc===null?0:Math.atan(x/(z-zc));}   // every wheel tangent to a circle round the turn centre
-  return 0;
-}
-function bodyRates(){                               // [forward, sideways, turn rate] per metre travelled by the fastest wheel
-  if(mode==='crab'){const a=crabAngle();return [Math.cos(a),Math.sin(a),0];}
-  if(mode==='spin')return [0,0,-amt.spin/RSPIN];   // + amount turns the nose right; the amount scales the spin rate
-  if(mode==='turn'){const zc=turnCentre();if(zc===null)return [1,0,0];const rmax=Math.hypot(XF+HALF,Math.abs(zc)+TRACK+OFF);return [Math.abs(zc)/rmax,0,-Math.sign(zc)/rmax];}
-  return [1,0,0];
-}
-// pose: v = [keel rise, parallelogram swing, right rocker, left rocker, 4 bogie pitches]
-function pose(v){
-  const phi=v[1];
-  rov.position.set(PX,0,PZ);rov.rotation.y=PSI;K.position.set(0,v[0],0);
-  upB.rotation.x=loB.rotation.x=-phi;
-  [[uP,1],[uN,-1]].forEach(([u,k])=>{const zz=k*TRACK;u.position.set(0,YM+zz*Math.sin(phi),zz*Math.cos(phi));});
-  rkP.rotation.z=v[2];rkN.rotation.z=v[3];
-  BOG.forEach((b,i)=>b.rotation.z=v[4+i]);
-  setAct(rollAct,new THREE.Vector3(0.03,0.25,0),new THREE.Vector3(0.03,YU2+(TRACK/2)*Math.sin(phi),(TRACK/2)*Math.cos(phi)));
-  const q=new THREE.Vector3(PX_,PY_,0).applyAxisAngle(new THREE.Vector3(0,0,1),v[2]);
-  setAct(pitchAct,new THREE.Vector3(PX_,0.11,PZ_),new THREE.Vector3(q.x,q.y+0,PZ_));
-  scene.updateMatrixWorld(true);
-}
-const _w=new THREE.Vector3();
-// height of a wheel's lowest point above the terrain under it (the tires stay vertical in this design)
-function gap(o){o.tire.getWorldPosition(_w);rov.worldToLocal(_w);return _w.y-R-floorFor(_w.x,_w.z);}
-const wheels=[];BOG.forEach(b=>steerGroups.filter(o=>o.g.parent===b).forEach(o=>wheels.push(o)));
-// Solve the pose from the ground up. The linkage is a tree, so each piece can be settled in turn:
-// bogie (its two wheels on the terrain) -> rocker (its two bogie hinges) -> parallelogram (the two rocker pivots).
-// Wheel centre sits 0.15 m fore/aft and 0.20 m below its bogie hinge; bogie hinges sit 0.40 m fore/aft and 0.05 m below the rocker pivot.
-const cl=x=>Math.max(-0.95,Math.min(0.95,x));
-// root of a 1-D function near a guess: widen a bracket until the sign flips, then Illinois false position
-function root(fn,x0,lo,hi){let d=0.02,a=Math.max(lo,x0-d),b=Math.min(hi,x0+d),fa=fn(a),fb=fn(b);
-  while(fa*fb>0&&(a>lo||b<hi)){d*=2;a=Math.max(lo,x0-d);b=Math.min(hi,x0+d);fa=fn(a);fb=fn(b);}
-  if(fa*fb>0){return Math.abs(fa)<Math.abs(fb)?a:b;}let side=0;
-  for(let k=0;k<40&&Math.abs(b-a)>1e-6;k++){const c=(a*fb-b*fa)/(fb-fa),fc=fn(c);
-    if(fc*fb>0){b=c;fb=fc;if(side===-1)fa/=2;side=-1;}else if(fc*fa>0){a=c;fa=fc;if(side===1)fb/=2;side=1;}else return c;}
-  return (a+b)/2;}
-// bogie at hinge x=hx: pitch t where both wheels touch; H = hinge height
-function bogieH(hx,z,t){const xf=hx+0.15*Math.cos(t)+0.20*Math.sin(t),xr=hx-0.15*Math.cos(t)+0.20*Math.sin(t);
-  return [floorFor(xf,z)+R-(0.15*Math.sin(t)-0.20*Math.cos(t)),floorFor(xr,z)+R-(-0.15*Math.sin(t)-0.20*Math.cos(t))];}
-function settleBogie(hx,z,t0){const t=root(t=>{const h=bogieH(hx,z,t);return h[0]-h[1];},t0,-1,1);const h=bogieH(hx,z,t);return {t,H:Math.max(h[0],h[1])};}
-// rocker on one side: pitch a where both bogie hinges sit where their bogies put them; A = rocker pivot height
-function settleSide(side,phi,a0,tf0,tr0){const z=side*(TRACK*Math.cos(phi)+OFF);let f,r;
-  const g=a=>{f=settleBogie(XF*Math.cos(a)+0.05*Math.sin(a),z,tf0);r=settleBogie(XR*Math.cos(a)+0.05*Math.sin(a),z,tr0);
-    return (f.H-(XF*Math.sin(a)-0.05*Math.cos(a)))-(r.H-(XR*Math.sin(a)-0.05*Math.cos(a)));};
-  const a=root(g,a0,-0.8,0.8);g(a);
-  return {a,A:Math.max(f.H-(XF*Math.sin(a)-0.05*Math.cos(a)),r.H-(XR*Math.sin(a)-0.05*Math.cos(a))),tf:f.t-a,tr:r.t-a};}
-function solve(){
-  let phi=v[1],P,N;
-  for(let k=0;k<6;k++){P=settleSide(1,phi,v[2],v[2]+v[4],v[2]+v[5]);N=settleSide(-1,phi,v[3],v[3]+v[6],v[3]+v[7]);phi=Math.asin(cl((P.A-N.A)/(2*TRACK)));}
-  v=[(P.A+N.A)/2-YM,phi,P.a,N.a,P.tf,P.tr,N.tf,N.tr];
-  pose(v);
-}
-// wheels swing toward their target angle at a steering-motor-like rate; returns true once every wheel is there
-function steerStep(dt){let ok=true;steerGroups.forEach(o=>{const x=o.g.parent.userData.xc+o.s*HALF,t=steerAngle(x,o.side*(TRACK+OFF)),c=o.g.rotation.y,d=t-c,mx=2.5*dt;
-  if(Math.abs(d)>mx){o.g.rotation.y=c+Math.sign(d)*mx;ok=false;}else o.g.rotation.y=t;});return ok;}
-function update(){const a=mode==='crab'?-crabAngle():0;swC=Math.cos(a);swS=Math.sin(a);solve();}
-
-// camera views (relative to the rover; the camera follows it)
-const VIEWS={iso:[1.5,1.05,1.6],front:[2.1,0.45,0.0001],side:[0.0001,0.5,2.4]};
-function setView(k){const p=VIEWS[k],w=toW(p[0],p[2]),t=toW(0.05,0),y=v[0];camY=y;camera.position.set(w[0],y+p[1],w[1]);if(controls){controls.target.set(t[0],y+0.22,t[1]);controls.update();}else camera.lookAt(t[0],y+0.22,t[1]);}
-// the camera rises and falls with the rover over hills
-let camY=0;function followY(){const dy=v[0]-camY;camY=v[0];camera.position.y+=dy;if(controls)controls.target.y+=dy;
-  const floor=G(camera.position.x,camera.position.z)+0.3;if(camera.position.y<floor)camera.position.y=floor;}   // never let the camera sink into a hill
-
-// ui wiring
-function press(groupId,btn){document.querySelectorAll('#'+groupId+' button').forEach(b=>b.setAttribute('aria-pressed',b===btn?'true':'false'));}
-const amtEl=document.getElementById('amt'),amtv=document.getElementById('amtv'),amtL=document.getElementById('amtL'),amtRow=document.getElementById('amtRow');
-const side=u=>u>0?'right':'left';
-function amtText(){const u=amt[mode];
-  if(mode==='straight')return 'no steering';
-  if(Math.abs(u)<0.02)return mode==='turn'?'straight ahead':mode==='spin'?'stopped':'straight ahead';
-  if(mode==='crab')return Math.round(Math.abs(u)*90)+'° to the '+side(u);
-  if(mode==='spin')return side(u)+', '+Math.round(Math.abs(u)*100)+'% rate';
-  return side(u)+', '+(RMIN/Math.abs(u)).toFixed(1)+' m radius';}
-function syncSteer(){const on=mode!=='straight';amtEl.disabled=!on;amtRow.classList.toggle('off',!on);amtEl.value=Math.round(amt[mode]*100);
-  amtL.textContent={straight:'Amount',crab:'Angle',spin:'Spin',turn:'Turn'}[mode];amtv.textContent=amtText();}
-amtEl.oninput=()=>{amt[mode]=parseFloat(amtEl.value)/100;amtv.textContent=amtText();};
-document.querySelectorAll('#steer button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;press('steer',b);syncSteer();});
-syncSteer();
-const speedEl=document.getElementById('speed'),speedv=document.getElementById('speedv');
-speedEl.oninput=()=>{speed=parseFloat(speedEl.value);speedv.textContent=Math.abs(speed)<0.001?'0 m/s (holding)':Math.abs(speed).toFixed(2)+' m/s '+(speed>0?'forward':'reverse');};
-const driveBtn=document.getElementById('drive');
-driveBtn.onclick=()=>{driving=!driving;driveBtn.textContent=driving?'Pause':'Drive';driveBtn.classList.toggle('primary',!driving);
-};
-// move the rover (the camera travels with it but keeps its own angle, so you can watch it turn)
-function moveTo(nx,nz,npsi){const dx=nx-PX,dz=nz-PZ;PX=nx;PZ=nz;PSI=npsi;cP=Math.cos(PSI);sP=Math.sin(PSI);camera.position.x+=dx;camera.position.z+=dz;if(controls){controls.target.x+=dx;controls.target.z+=dz;}}
-function stepAlong(ds){const [f,sd,w]=bodyRates(),psi=PSI+w*ds/2,c=Math.cos(psi),s=Math.sin(psi);   // midpoint heading keeps arcs round
-  moveTo(PX+(f*c+sd*s)*ds,PZ+(-f*s+sd*c)*ds,PSI+w*ds);}
-document.getElementById('reset').onclick=()=>{moveTo(0,0,0);v=[0,0,0,0,0,0,0,0];streamRocks();update();setView('iso');};
-
-// wheel tilt tags and chassis/actuator readout
-const tagBox=document.getElementById('tags');
-const tags=steerGroups.map(()=>{const d=document.createElement('div');d.className='tag';tagBox.appendChild(d);return d;});
-const _p=new THREE.Vector3(),_a=new THREE.Vector3(),_q=new THREE.Quaternion();
-const tiltEl=document.getElementById('tilt'),_cq=new THREE.Quaternion(),_f=new THREE.Vector3(),_s=new THREE.Vector3();
-// ground slope under the rover, in its own frame
-function gnd(){const a=toW(0.5,0),b=toW(-0.5,0),c=toW(0,0.5),d=toW(0,-0.5),deg=x=>Math.atan(x)*180/Math.PI;
-  const up=deg(G(a[0],a[1])-G(b[0],b[1])),sd=deg(G(c[0],c[1])-G(d[0],d[1]));
-  return 'Slope '+Math.abs(up).toFixed(0)+'° '+(Math.abs(up)<0.5?'flat':up>0?'uphill':'downhill')+'<br>Side  '+Math.abs(sd).toFixed(0)+'° '+(Math.abs(sd)<0.5?'flat':sd>0?'right high':'left high');}
-function drawReadouts(){const r=canvas.getBoundingClientRect();
-  steerGroups.forEach((o,i)=>{const t=tags[i];
-    o.g.getWorldQuaternion(_q);_a.set(0,0,1).applyQuaternion(_q);
-    const deg=Math.abs(Math.asin(Math.max(-1,Math.min(1,_a.y))))*180/Math.PI;
-    o.g.localToWorld(_p.set(0,0.02,0));_p.project(camera);
-    if(_p.z>1){t.style.display='none';return;}
-    t.style.display='';t.style.left=((_p.x+1)/2*r.width)+'px';t.style.top=((1-_p.y)/2*r.height)+'px';
-    t.textContent=deg.toFixed(1)+'°';t.classList.toggle('lean',deg>=0.5);});
-  chassisMesh.getWorldQuaternion(_cq);_f.set(1,0,0).applyQuaternion(_cq);_s.set(0,0,1).applyQuaternion(_cq);
-  const d=x=>Math.asin(Math.max(-1,Math.min(1,x)))*180/Math.PI,p=d(_f.y),rr=d(_s.y);
-  const fb=Math.abs(p)<0.05?'level':(p>0?'nose up':'nose down'),lr=Math.abs(rr)<0.05?'level':(rr>0?'right up':'left up');
-  const mm=a=>{const e=(a.len-a.L0)*1000;return (e>=0?'+':'−')+Math.abs(e).toFixed(0)+' mm';};
-  tiltEl.innerHTML='<b>Chassis</b>Front–back '+Math.abs(p).toFixed(1)+'° '+fb+'<br>Side–side  '+Math.abs(rr).toFixed(1)+'° '+lr+
-    '<b style="margin-top:4px">Actuator stroke</b>Roll  '+mm(rollAct)+'<br>Pitch '+mm(pitchAct)+'<b style="margin-top:4px">Ground</b>'+gnd();}
-
-function resize(){const r=canvas.parentElement.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/Math.max(r.height,1);camera.updateProjectionMatrix();}
-function paintBg(){scene.background=new THREE.Color(css('--scene')||'#e9ecea');scene.fog.color.copy(scene.background);}
-new ResizeObserver(resize).observe(canvas.parentElement);
-try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',paintBg);}catch(e){}
-new MutationObserver(paintBg).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-
-// drive loop: wheels first swing to the chosen steering, then the rover moves; small substeps keep the solver on track
-let lastT=0,lastCell='';
-function loop(now){
-  const dt=Math.min(0.05,(now-(lastT||now))/1000);lastT=now;
-  const aligned=steerStep(dt);
-  if(driving&&aligned&&Math.abs(speed)>0.001){const d=speed*dt,n=Math.ceil(Math.abs(d)/0.005);for(let i=0;i<n;i++){stepAlong(d/n);update();}
-    const key=Math.floor(PX/CELL)+','+Math.floor(PZ/CELL);if(key!==lastCell){lastCell=key;streamRocks();}}
-  else if(!aligned)pose(v);
-  followY();
-  if(controls)controls.update();renderer.render(scene,camera);drawReadouts();requestAnimationFrame(loop);
-}
-paintBg();resize();streamRocks();setView('iso');update();requestAnimationFrame(loop);
-})();
-</script>
-
+</body>
 </html>
